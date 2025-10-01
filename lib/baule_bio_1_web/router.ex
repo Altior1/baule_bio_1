@@ -75,8 +75,7 @@ defmodule BauleBio1Web.Router do
       live "/ingredients/:id", IngredientLive.Show, :show
       live "/ingredients/:id/edit", IngredientLive.Form, :edit
 
-      live "/recipes/pending", RecipeLive.Index, :pending
-      live "/recipes/:id/approve", RecipeLive.Show, :approve
+      live "/recipe-approval", RecipeApproval, :index
     end
   end
 

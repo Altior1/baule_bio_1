@@ -100,26 +100,17 @@ defmodule BauleBio1Web.Layouts do
                   </.link>
 
                   <%= if @current_scope.user.role == "admin" do %>
-                    <hr class="my-1" />
-                    <div class="px-4 py-2 text-xs font-medium text-gray-500 uppercase tracking-wide">
-                      Administration
+                    <div class="border-t border-gray-100 py-1">
+                      <.link href={~p"/admin/ingredients"} class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                        <.icon name="hero-beaker" class="w-4 h-4 inline mr-2" />
+                        Gestion Ingrédients
+                      </.link>
+                      <.link href={~p"/admin/recipe-approval"} class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                        <.icon name="hero-clipboard-document-check" class="w-4 h-4 inline mr-2" />
+                        Validation Recettes
+                      </.link>
                     </div>
-                    <.link
-                      navigate={~p"/admin/ingredients"}
-                      class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                    >
-                      <.icon name="hero-beaker" class="w-4 h-4 inline mr-2" /> Ingrédients
-                    </.link>
-                    <.link
-                      navigate={~p"/admin/recipes/pending"}
-                      class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                    >
-                      <.icon name="hero-clipboard-document-check" class="w-4 h-4 inline mr-2" />
-                      Recettes à approuver
-                    </.link>
-                  <% end %>
-
-                  <hr class="my-1" />
+                  <% end %>                  <hr class="my-1" />
                   <.link
                     href={~p"/users/log-out"}
                     method="delete"
