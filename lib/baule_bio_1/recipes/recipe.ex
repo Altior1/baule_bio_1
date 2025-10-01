@@ -42,7 +42,8 @@ defmodule BauleBio1.Recipes.Recipe do
     |> validate_number(:cook_time, greater_than: 0)
     |> validate_number(:servings, greater_than: 0)
     |> put_change(:user_id, user_scope.user.id)
-    |> put_change(:status, "pending") # Auto-submit for approval
+    # Auto-submit for approval
+    |> put_change(:status, "pending")
   end
 
   @doc false

@@ -121,10 +121,30 @@ recipe_attrs = %{
 
 case Repo.get_by(Recipes.Recipe, title: recipe_attrs.title) do
   nil ->
-    recipe = %Recipes.Recipe{}
-             |> Ecto.Changeset.cast(recipe_attrs, [:title, :description, :instructions, :prep_time, :cook_time, :servings, :status, :user_id])
-             |> Ecto.Changeset.validate_required([:title, :description, :instructions, :prep_time, :cook_time, :servings, :status, :user_id])
-             |> Repo.insert!()
+    recipe =
+      %Recipes.Recipe{}
+      |> Ecto.Changeset.cast(recipe_attrs, [
+        :title,
+        :description,
+        :instructions,
+        :prep_time,
+        :cook_time,
+        :servings,
+        :status,
+        :user_id
+      ])
+      |> Ecto.Changeset.validate_required([
+        :title,
+        :description,
+        :instructions,
+        :prep_time,
+        :cook_time,
+        :servings,
+        :status,
+        :user_id
+      ])
+      |> Repo.insert!()
+
     IO.puts("Recipe created: #{recipe.title}")
 
   _recipe ->
