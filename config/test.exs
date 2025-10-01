@@ -1,4 +1,9 @@
 import Config
+username = System.get_env("DB_USERNAME") || "postgres"
+password = System.get_env("DB_PASSWORD") || "postgres"
+hostname = System.get_env("DB_HOSTNAME") || "localhost"
+port = System.get_env("DB_PORT") || "5432"
+database = System.get_env("DB_NAME") || "baule_bio_1_test"
 
 # Configure your database
 #
@@ -6,10 +11,10 @@ import Config
 # to provide built-in test partitioning in CI environment.
 # Run `mix help test` for more information.
 config :baule_bio_1, BauleBio1.Repo,
-  username: "postgres",
-  password: "postgres",
-  hostname: "localhost",
-  database: "baule_bio_1_test#{System.get_env("MIX_TEST_PARTITION")}",
+  username: username,
+  password: password,
+  hostname: hostname,
+  database: "#{database}#{System.get_env("MIX_TEST_PARTITION")}",
   pool: Ecto.Adapters.SQL.Sandbox,
   pool_size: System.schedulers_online() * 2
 

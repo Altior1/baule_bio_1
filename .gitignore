@@ -35,3 +35,4 @@ baule_bio_1-*.tar
 npm-debug.log
 /assets/node_modules/
 
+.env

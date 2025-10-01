@@ -1,11 +1,17 @@
 import Config
 
+username = System.get_env("DB_USERNAME") || "postgres"
+password = System.get_env("DB_PASSWORD") || "postgres"
+hostname = System.get_env("DB_HOSTNAME") || "localhost"
+port = System.get_env("DB_PORT") || "5432"
+database = System.get_env("DB_NAME") || "baule_bio_1_dev"
 # Configure your database
 config :baule_bio_1, BauleBio1.Repo,
-  username: "postgres",
-  password: "postgres",
-  hostname: "localhost",
-  database: "baule_bio_1_dev",
+  username: username,
+  password: password,
+  hostname: hostname,
+  port: port,
+  database: database,
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
