@@ -1,4 +1,7 @@
 import Config
+
+# Only in tests, remove the complexity from the password hashing algorithm
+config :bcrypt_elixir, :log_rounds, 1
 username = System.get_env("DB_USERNAME") || "postgres"
 password = System.get_env("DB_PASSWORD") || "postgres"
 hostname = System.get_env("DB_HOSTNAME") || "localhost"
