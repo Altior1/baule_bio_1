@@ -45,6 +45,38 @@ defmodule BauleBio1.Recipes do
   end
 
   @doc """
+  Returns the list of all approved recipes (public).
+  """
+  def list_approved_recipes do
+    Recipe
+    |> where([r], r.status == "approved")
+    |> preload(:user)
+    |> Repo.all()
+  end
+
+  @doc """
+  Returns the list of recipes for a specific user.
+  """
+  def list_user_recipes(%Scope{} = scope) do
+    Recipe
+    |> where([r], r.user_id == ^scope.user.id)
+    |> preload(:user)
+    |> order_by([r], desc: r.inserted_at)
+    |> Repo.all()
+  end
+
+  @doc """
+  Returns the list of pending recipes for admin approval.
+  """
+  def list_pending_recipes do
+    Recipe
+    |> where([r], r.status == "pending")
+    |> preload(:user)
+    |> order_by([r], asc: r.inserted_at)
+    |> Repo.all()
+  end
+
+  @doc """
   Gets a single recipe.
 
   Raises `Ecto.NoResultsError` if the Recipe does not exist.
@@ -60,6 +92,26 @@ defmodule BauleBio1.Recipes do
   """
   def get_recipe!(%Scope{} = scope, id) do
     Repo.get_by!(Recipe, id: id, user_id: scope.user.id)
+  end
+
+  @doc """
+  Gets a single approved recipe (public access).
+  """
+  def get_approved_recipe!(id) do
+    Recipe
+    |> where([r], r.id == ^id and r.status == "approved")
+    |> preload(:user)
+    |> Repo.one!()
+  end
+
+  @doc """
+  Gets any recipe (admin access).
+  """
+  def get_any_recipe!(id) do
+    Recipe
+    |> where([r], r.id == ^id)
+    |> preload(:user)
+    |> Repo.one!()
   end
 
   @doc """
@@ -143,5 +195,21 @@ defmodule BauleBio1.Recipes do
     true = recipe.user_id == scope.user.id
 
     Recipe.changeset(recipe, attrs, scope)
+  end
+
+  @doc """
+  Approves or rejects a recipe (admin only).
+  """
+  def update_recipe_status(%Recipe{} = recipe, status) when status in ["approved", "rejected"] do
+    recipe
+    |> Ecto.Changeset.change(status: status)
+    |> Repo.update()
+  end
+
+  @doc """
+  Returns a changeset for public recipe creation/editing.
+  """
+  def change_public_recipe(%Recipe{} = recipe, attrs \\ %{}) do
+    Recipe.changeset_without_scope(recipe, attrs)
   end
 end

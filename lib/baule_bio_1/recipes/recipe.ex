@@ -35,9 +35,39 @@ defmodule BauleBio1.Recipes.Recipe do
       :instructions,
       :prep_time,
       :cook_time,
+      :servings
+    ])
+    |> validate_inclusion(:status, ["draft", "pending", "approved", "rejected"])
+    |> validate_number(:prep_time, greater_than: 0)
+    |> validate_number(:cook_time, greater_than: 0)
+    |> validate_number(:servings, greater_than: 0)
+    |> put_change(:user_id, user_scope.user.id)
+    |> put_change(:status, "pending") # Auto-submit for approval
+  end
+
+  @doc false
+  def changeset_without_scope(recipe, attrs) do
+    recipe
+    |> cast(attrs, [
+      :title,
+      :description,
+      :instructions,
+      :prep_time,
+      :cook_time,
       :servings,
       :status
     ])
-    |> put_change(:user_id, user_scope.user.id)
+    |> validate_required([
+      :title,
+      :description,
+      :instructions,
+      :prep_time,
+      :cook_time,
+      :servings
+    ])
+    |> validate_inclusion(:status, ["draft", "pending", "approved", "rejected"])
+    |> validate_number(:prep_time, greater_than: 0)
+    |> validate_number(:cook_time, greater_than: 0)
+    |> validate_number(:servings, greater_than: 0)
   end
 end

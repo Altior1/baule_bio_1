@@ -46,6 +46,43 @@ liveSocket.connect()
 // >> liveSocket.disableLatencySim()
 window.liveSocket = liveSocket
 
+// Navigation JavaScript
+document.addEventListener('DOMContentLoaded', function() {
+  // Menu mobile toggle
+  window.toggleMobileMenu = function() {
+    const menu = document.getElementById('mobile-menu');
+    if (menu) {
+      menu.classList.toggle('hidden');
+    }
+  }
+  
+  // Menu dropdown utilisateur
+  document.addEventListener('click', function(event) {
+    const userMenu = document.getElementById('user-menu');
+    const userButton = event.target.closest('button');
+    
+    if (userButton && userButton.querySelector('.hero-user-circle')) {
+      event.preventDefault();
+      if (userMenu) {
+        userMenu.classList.toggle('hidden');
+      }
+    } else if (userMenu && !userMenu.contains(event.target)) {
+      userMenu.classList.add('hidden');
+    }
+  });
+  
+  // Fermer les menus avec Escape
+  document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+      const userMenu = document.getElementById('user-menu');
+      const mobileMenu = document.getElementById('mobile-menu');
+      
+      if (userMenu) userMenu.classList.add('hidden');
+      if (mobileMenu) mobileMenu.classList.add('hidden');
+    }
+  });
+});
+
 // The lines below enable quality of life phoenix_live_reload
 // development features:
 //
