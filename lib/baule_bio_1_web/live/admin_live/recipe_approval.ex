@@ -1,4 +1,4 @@
-defmodule BauleBio1Web.AdminLive.RecipeApproval do
+defmodule BauleBio1Web.Admin.RecipeApproval do
   use BauleBio1Web, :live_view
 
   alias BauleBio1.Recipes
@@ -15,7 +15,7 @@ defmodule BauleBio1Web.AdminLive.RecipeApproval do
 
   @impl true
   def handle_event("approve", %{"id" => id}, socket) do
-    recipe = Recipes.get_recipe!(socket.assigns.current_scope, id)
+    recipe = Recipes.get_any_recipe!(id)
 
     case Recipes.update_recipe_status(recipe, "approved") do
       {:ok, _recipe} ->
@@ -30,7 +30,7 @@ defmodule BauleBio1Web.AdminLive.RecipeApproval do
   end
 
   def handle_event("reject", %{"id" => id}, socket) do
-    recipe = Recipes.get_recipe!(socket.assigns.current_scope, id)
+    recipe = Recipes.get_any_recipe!(id)
 
     case Recipes.update_recipe_status(recipe, "rejected") do
       {:ok, _recipe} ->

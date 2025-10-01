@@ -79,6 +79,24 @@ defmodule BauleBio1.Recipes do
   @doc """
   Gets a single recipe.
 
+  Returns `nil` if the Recipe does not exist or doesn't belong to the user.
+
+  ## Examples
+
+      iex> get_recipe(scope, 123)
+      %Recipe{}
+
+      iex> get_recipe(scope, 456)
+      nil
+
+  """
+  def get_recipe(%Scope{} = scope, id) do
+    Repo.get_by(Recipe, id: id, user_id: scope.user.id)
+  end
+
+  @doc """
+  Gets a single recipe.
+
   Raises `Ecto.NoResultsError` if the Recipe does not exist.
 
   ## Examples
@@ -102,6 +120,36 @@ defmodule BauleBio1.Recipes do
     |> where([r], r.id == ^id and r.status == "approved")
     |> preload(:user)
     |> Repo.one!()
+  end
+
+  @doc """
+  Gets any recipe with admin access or user access.
+  Returns nil if not found or not accessible.
+  """
+  def get_recipe_with_access(%Scope{user: %{role: "admin"}}, id) do
+    Recipe
+    |> where([r], r.id == ^id)
+    |> preload(:user)
+    |> Repo.one()
+  end
+
+  def get_recipe_with_access(%Scope{} = scope, id) do
+    get_recipe(scope, id)
+  end
+
+  @doc """
+  Gets any recipe with admin access or user access.
+  Raises if not found or not accessible.
+  """
+  def get_recipe_with_access!(%Scope{user: %{role: "admin"}}, id) do
+    Recipe
+    |> where([r], r.id == ^id)
+    |> preload(:user)
+    |> Repo.one!()
+  end
+
+  def get_recipe_with_access!(%Scope{} = scope, id) do
+    get_recipe!(scope, id)
   end
 
   @doc """
