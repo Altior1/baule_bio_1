@@ -5,15 +5,17 @@ defmodule BauleBio1Web.RecipeLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
-    recipes = case socket.assigns.live_action do
-      :index -> Recipes.list_approved_recipes()
-      :my_recipes -> Recipes.list_user_recipes(socket.assigns.current_scope)
-    end
+    recipes =
+      case socket.assigns.live_action do
+        :index -> Recipes.list_approved_recipes()
+        :my_recipes -> Recipes.list_user_recipes(socket.assigns.current_scope)
+      end
 
-    page_title = case socket.assigns.live_action do
-      :index -> "Recettes Biologiques"
-      :my_recipes -> "Mes Recettes"
-    end
+    page_title =
+      case socket.assigns.live_action do
+        :index -> "Recettes Biologiques"
+        :my_recipes -> "Mes Recettes"
+      end
 
     {:ok,
      socket
@@ -71,8 +73,7 @@ defmodule BauleBio1Web.RecipeLive.Index do
             </p>
             <%= if @current_scope do %>
               <.button navigate={~p"/recipes/new"} variant="primary">
-                <.icon name="hero-plus" class="w-4 h-4 mr-2" />
-                Créer ma première recette
+                <.icon name="hero-plus" class="w-4 h-4 mr-2" /> Créer ma première recette
               </.button>
             <% else %>
               <.button navigate={~p"/users/register"} variant="primary">
@@ -82,11 +83,14 @@ defmodule BauleBio1Web.RecipeLive.Index do
           </div>
         <% else %>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div :for={{_id, recipe} <- @streams.recipes} class="bg-white rounded-lg shadow-sm border hover:shadow-md transition-shadow">
+            <div
+              :for={{_id, recipe} <- @streams.recipes}
+              class="bg-white rounded-lg shadow-sm border hover:shadow-md transition-shadow"
+            >
               <div class="p-6">
                 <h3 class="text-lg font-semibold text-gray-900 mb-2">{recipe.title}</h3>
                 <p class="text-gray-600 text-sm mb-4 line-clamp-2">{recipe.description}</p>
-                
+
                 <div class="flex items-center gap-4 text-sm text-gray-500 mb-4">
                   <div class="flex items-center gap-1">
                     <.icon name="hero-clock" class="w-4 h-4" />
@@ -98,7 +102,10 @@ defmodule BauleBio1Web.RecipeLive.Index do
                   </div>
                 </div>
 
-                <.link navigate={~p"/recipes/#{recipe}"} class="inline-flex items-center justify-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 w-full">
+                <.link
+                  navigate={~p"/recipes/#{recipe}"}
+                  class="inline-flex items-center justify-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 w-full"
+                >
                   Voir la recette
                 </.link>
               </div>
@@ -115,8 +122,7 @@ defmodule BauleBio1Web.RecipeLive.Index do
               Commencez à partager vos délicieuses recettes biologiques !
             </p>
             <.button navigate={~p"/recipes/new"} variant="primary">
-              <.icon name="hero-plus" class="w-4 h-4 mr-2" />
-              Créer ma première recette
+              <.icon name="hero-plus" class="w-4 h-4 mr-2" /> Créer ma première recette
             </.button>
           </div>
         <% else %>
@@ -145,7 +151,10 @@ defmodule BauleBio1Web.RecipeLive.Index do
               <div class="sr-only">
                 <.link navigate={~p"/recipes/#{recipe}"}>Voir</.link>
               </div>
-              <.link navigate={~p"/recipes/#{recipe}/edit"} class="text-indigo-600 hover:text-indigo-900">
+              <.link
+                navigate={~p"/recipes/#{recipe}/edit"}
+                class="text-indigo-600 hover:text-indigo-900"
+              >
                 Modifier
               </.link>
             </:action>

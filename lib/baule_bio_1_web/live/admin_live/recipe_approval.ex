@@ -16,7 +16,7 @@ defmodule BauleBio1Web.AdminLive.RecipeApproval do
   @impl true
   def handle_event("approve", %{"id" => id}, socket) do
     recipe = Recipes.get_recipe!(socket.assigns.current_scope, id)
-    
+
     case Recipes.update_recipe_status(recipe, "approved") do
       {:ok, _recipe} ->
         {:noreply,
@@ -31,7 +31,7 @@ defmodule BauleBio1Web.AdminLive.RecipeApproval do
 
   def handle_event("reject", %{"id" => id}, socket) do
     recipe = Recipes.get_recipe!(socket.assigns.current_scope, id)
-    
+
     case Recipes.update_recipe_status(recipe, "rejected") do
       {:ok, _recipe} ->
         {:noreply,
@@ -49,11 +49,13 @@ defmodule BauleBio1Web.AdminLive.RecipeApproval do
       minutes >= 60 ->
         hours = div(minutes, 60)
         remaining = rem(minutes, 60)
+
         if remaining > 0 do
           "#{hours}h #{remaining}min"
         else
           "#{hours}h"
         end
+
       true ->
         "#{minutes}min"
     end
@@ -78,13 +80,17 @@ defmodule BauleBio1Web.AdminLive.RecipeApproval do
         </div>
       <% else %>
         <div class="space-y-6">
-          <div :for={{id, recipe} <- @streams.pending_recipes} id={id} class="bg-white rounded-lg shadow-sm border overflow-hidden">
+          <div
+            :for={{id, recipe} <- @streams.pending_recipes}
+            id={id}
+            class="bg-white rounded-lg shadow-sm border overflow-hidden"
+          >
             <div class="p-6">
               <div class="flex justify-between items-start mb-4">
                 <div class="flex-1">
                   <h3 class="text-xl font-semibold text-gray-900 mb-2">{recipe.title}</h3>
                   <p class="text-gray-600 mb-3">{recipe.description}</p>
-                  
+
                   <div class="flex items-center gap-4 text-sm text-gray-500 mb-4">
                     <div class="flex items-center gap-1">
                       <.icon name="hero-user" class="w-4 h-4" />
@@ -106,27 +112,33 @@ defmodule BauleBio1Web.AdminLive.RecipeApproval do
                 </div>
 
                 <div class="ml-6 flex gap-2">
-                  <.link navigate={~p"/recipes/#{recipe}"} class="inline-flex items-center px-3 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
-                    <.icon name="hero-eye" class="w-4 h-4 mr-2" />
-                    Voir
+                  <.link
+                    navigate={~p"/recipes/#{recipe}"}
+                    class="inline-flex items-center px-3 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+                  >
+                    <.icon name="hero-eye" class="w-4 h-4 mr-2" /> Voir
                   </.link>
-                  
-                  <button phx-click="approve" phx-value-id={recipe.id} 
-                          class="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700">
-                    <.icon name="hero-check" class="w-4 h-4 mr-2" />
-                    Approuver
+
+                  <button
+                    phx-click="approve"
+                    phx-value-id={recipe.id}
+                    class="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700"
+                  >
+                    <.icon name="hero-check" class="w-4 h-4 mr-2" /> Approuver
                   </button>
-                  
-                  <button phx-click="reject" phx-value-id={recipe.id}
-                          data-confirm="Êtes-vous sûr de vouloir rejeter cette recette ?"
-                          class="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700">
-                    <.icon name="hero-x-mark" class="w-4 h-4 mr-2" />
-                    Rejeter
+
+                  <button
+                    phx-click="reject"
+                    phx-value-id={recipe.id}
+                    data-confirm="Êtes-vous sûr de vouloir rejeter cette recette ?"
+                    class="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700"
+                  >
+                    <.icon name="hero-x-mark" class="w-4 h-4 mr-2" /> Rejeter
                   </button>
                 </div>
               </div>
-
-              <!-- Aperçu des instructions -->
+              
+    <!-- Aperçu des instructions -->
               <div class="border-t pt-4">
                 <h4 class="font-medium text-gray-900 mb-2">Instructions :</h4>
                 <div class="bg-gray-50 rounded-md p-3">

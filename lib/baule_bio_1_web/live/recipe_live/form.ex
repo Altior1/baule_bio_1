@@ -21,60 +21,103 @@ defmodule BauleBio1Web.RecipeLive.Form do
         </.header>
 
         <div class="bg-white shadow-sm rounded-lg border">
-          <.form for={@form} id="recipe-form" phx-change="validate" phx-submit="save" class="space-y-6 p-6">
+          <.form
+            for={@form}
+            id="recipe-form"
+            phx-change="validate"
+            phx-submit="save"
+            class="space-y-6 p-6"
+          >
             <!-- Informations de base -->
             <div class="space-y-4">
               <h3 class="text-lg font-medium text-gray-900">Informations générales</h3>
-              
-              <.input field={@form[:title]} type="text" label="Titre de la recette" required />
-              <.input field={@form[:description]} type="textarea" label="Description courte" 
-                     placeholder="Décrivez brièvement votre recette..." rows="3" />
-            </div>
 
-            <!-- Instructions -->
+              <.input field={@form[:title]} type="text" label="Titre de la recette" required />
+              <.input
+                field={@form[:description]}
+                type="textarea"
+                label="Description courte"
+                placeholder="Décrivez brièvement votre recette..."
+                rows="3"
+              />
+            </div>
+            
+    <!-- Instructions -->
             <div class="space-y-4">
               <h3 class="text-lg font-medium text-gray-900">Préparation</h3>
-              
-              <.input field={@form[:instructions]} type="textarea" label="Instructions détaillées" 
-                     placeholder="Décrivez étape par étape la préparation de votre recette..." rows="8" required />
-            </div>
 
-            <!-- Temps et portions -->
+              <.input
+                field={@form[:instructions]}
+                type="textarea"
+                label="Instructions détaillées"
+                placeholder="Décrivez étape par étape la préparation de votre recette..."
+                rows="8"
+                required
+              />
+            </div>
+            
+    <!-- Temps et portions -->
             <div class="space-y-4">
               <h3 class="text-lg font-medium text-gray-900">Timing et portions</h3>
-              
+
               <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <.input field={@form[:prep_time]} type="number" label="Temps de préparation (min)" min="1" required />
-                <.input field={@form[:cook_time]} type="number" label="Temps de cuisson (min)" min="0" required />
-                <.input field={@form[:servings]} type="number" label="Nombre de portions" min="1" required />
+                <.input
+                  field={@form[:prep_time]}
+                  type="number"
+                  label="Temps de préparation (min)"
+                  min="1"
+                  required
+                />
+                <.input
+                  field={@form[:cook_time]}
+                  type="number"
+                  label="Temps de cuisson (min)"
+                  min="0"
+                  required
+                />
+                <.input
+                  field={@form[:servings]}
+                  type="number"
+                  label="Nombre de portions"
+                  min="1"
+                  required
+                />
               </div>
             </div>
-
-            <!-- Statut (seulement pour admin ou si edit et draft) -->
+            
+    <!-- Statut (seulement pour admin ou si edit et draft) -->
             <%= if show_status_field?(@current_scope, @recipe) do %>
               <div class="space-y-4">
                 <h3 class="text-lg font-medium text-gray-900">Statut</h3>
-                <.input field={@form[:status]} type="select" label="Statut de la recette" 
-                       options={status_options(@current_scope)} />
+                <.input
+                  field={@form[:status]}
+                  type="select"
+                  label="Statut de la recette"
+                  options={status_options(@current_scope)}
+                />
               </div>
             <% end %>
-
-            <!-- Actions -->
+            
+    <!-- Actions -->
             <div class="flex items-center justify-between pt-6 border-t border-gray-200">
-              <.link navigate={return_path(@current_scope, @return_to, @recipe)} 
-                     class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
-                <.icon name="hero-arrow-left" class="w-4 h-4 mr-2" />
-                Annuler
+              <.link
+                navigate={return_path(@current_scope, @return_to, @recipe)}
+                class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+              >
+                <.icon name="hero-arrow-left" class="w-4 h-4 mr-2" /> Annuler
               </.link>
 
               <div class="flex gap-3">
                 <%= if @live_action == :edit && @recipe.status == "draft" do %>
-                  <.button type="button" phx-click="save_as_draft" class="bg-gray-600 hover:bg-gray-700">
-                    <.icon name="hero-document" class="w-4 h-4 mr-2" />
-                    Enregistrer le brouillon
+                  <.button
+                    type="button"
+                    phx-click="save_as_draft"
+                    class="bg-gray-600 hover:bg-gray-700"
+                  >
+                    <.icon name="hero-document" class="w-4 h-4 mr-2" /> Enregistrer le brouillon
                   </.button>
                 <% end %>
-                
+
                 <.button phx-disable-with="Enregistrement..." variant="primary">
                   <.icon name="hero-check" class="w-4 h-4 mr-2" />
                   <%= if @live_action == :new do %>
@@ -87,8 +130,8 @@ defmodule BauleBio1Web.RecipeLive.Form do
             </div>
           </.form>
         </div>
-
-        <!-- Aide -->
+        
+    <!-- Aide -->
         <div class="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-4">
           <div class="flex">
             <.icon name="hero-information-circle" class="w-5 h-5 text-blue-600 mt-0.5 mr-3" />
@@ -139,7 +182,9 @@ defmodule BauleBio1Web.RecipeLive.Form do
 
   @impl true
   def handle_event("validate", %{"recipe" => recipe_params}, socket) do
-    changeset = Recipes.change_recipe(socket.assigns.current_scope, socket.assigns.recipe, recipe_params)
+    changeset =
+      Recipes.change_recipe(socket.assigns.current_scope, socket.assigns.recipe, recipe_params)
+
     {:noreply, assign(socket, form: to_form(changeset, action: :validate))}
   end
 
@@ -148,10 +193,10 @@ defmodule BauleBio1Web.RecipeLive.Form do
   end
 
   def handle_event("save_as_draft", _params, socket) do
-    form_params = 
+    form_params =
       socket.assigns.form.params
       |> Map.put("status", "draft")
-    
+
     save_recipe(socket, socket.assigns.live_action, form_params)
   end
 
@@ -187,8 +232,8 @@ defmodule BauleBio1Web.RecipeLive.Form do
 
   defp show_status_field?(current_scope, recipe) do
     # Seuls les admins peuvent modifier le statut, ou l'utilisateur sur ses brouillons
-    current_scope.user.role == "admin" || 
-    (recipe.status == "draft" && recipe.user_id == current_scope.user.id)
+    current_scope.user.role == "admin" ||
+      (recipe.status == "draft" && recipe.user_id == current_scope.user.id)
   end
 
   defp status_options(current_scope) do
